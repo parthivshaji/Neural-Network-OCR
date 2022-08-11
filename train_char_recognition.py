@@ -14,13 +14,16 @@ X_train, X_test = X_train / 255, X_test / 255
 
 model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu))
+model.add(tf.keras.layers.Dense(128, activation=tf.nn.sigmoid))
+model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu))
+model.add(tf.keras.layers.Dense(128, activation=tf.nn.sigmoid))
 model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu))
 model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu))
 model.add(tf.keras.layers.Dense(27, activation=tf.nn.softmax))
 
 model.compile(optimizer = 'adam', loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'])
 
-model.fit(X_train, y_train, epochs = 5)
+model.fit(X_train, y_train, epochs = 10)
 
 val_loss, val_acc = model.evaluate(X_test, y_test)
 

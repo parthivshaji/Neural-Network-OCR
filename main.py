@@ -14,14 +14,15 @@ white = (255, 255, 255) # canvas back
 
 def detectLetter():
     size = (28, 28)
-    #final_image = output_image.convert('L')
     final_image = output_image
+
+    # Tranformations on image since the dataset was mirrored and rotated 90 deg
     final_image = PIL.ImageOps.invert(final_image)
     final_image = PIL.ImageOps.mirror(final_image)
     final_image = final_image.rotate(90)
     final_image = (np.array(final_image.resize(size, PIL.Image.ANTIALIAS)))
     final_image = np.expand_dims(np.reshape(final_image, (784,)), axis=0)
-    print(np.shape(final_image))
+
     char_model = tf.keras.models.load_model('char_recognizer.model')
     digit_model = tf.keras.models.load_model('digit_recognizer.model')
 
@@ -32,7 +33,6 @@ def detectLetter():
         print("letter",chr(np.argmax(char_model_prediction) + 64))
     else:
         print("number",np.argmax(digit_model_prediction))
-        print(digit_model_prediction)
 
 def clearCanvas():
     global output_image
