@@ -1,5 +1,7 @@
 import tensorflow as tf
 from scipy import io as sio
+import matplotlib.pyplot as plt
+import numpy as np
 
 mat = sio.loadmat('emnist-digits.mat')
 data = mat['dataset']
