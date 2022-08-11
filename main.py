@@ -20,8 +20,6 @@ def detectLetter():
     final_image = PIL.ImageOps.mirror(final_image)
     final_image = final_image.rotate(90)
     final_image = (np.array(final_image.resize(size, PIL.Image.ANTIALIAS)))
-    plt.imshow(final_image)
-    plt.show()
     final_image = np.expand_dims(np.reshape(final_image, (784,)), axis=0)
     print(np.shape(final_image))
     char_model = tf.keras.models.load_model('char_recognizer.model')
@@ -29,7 +27,7 @@ def detectLetter():
 
     char_model_prediction = char_model.predict(final_image / 255)
     digit_model_prediction = digit_model.predict(final_image / 255)
-    
+
     if (np.max(char_model_prediction) > np.max(digit_model_prediction)):
         print("letter",chr(np.argmax(char_model_prediction) + 64))
     else:
@@ -37,7 +35,13 @@ def detectLetter():
         print(digit_model_prediction)
 
 def clearCanvas():
+    global output_image
+    global draw
     canvas.delete("all")
+    output_image = PIL.Image.new("L", (width, height), 255)
+    draw = ImageDraw.Draw(output_image)
+    canvas.pack(expand=YES, fill=BOTH)
+    canvas.bind("<B1-Motion>", paint)
 
 def paint(event):
     x1, y1 = (event.x - 1), (event.y - 1)
@@ -58,7 +62,7 @@ canvas.pack(expand=YES, fill=BOTH)
 canvas.bind("<B1-Motion>", paint)
 
 # add a button to save the image
-button=Button(text="Detect Letter",command=detectLetter)
+button=Button(text="Detect Character",command=detectLetter)
 button.pack()
 
 button=Button(text="Clear Canvas",command=clearCanvas)
