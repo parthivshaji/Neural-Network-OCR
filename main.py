@@ -26,12 +26,13 @@ def detectLetter():
     model_prediction = model.predict(final_image / 255)
 
     if np.argmax(model_prediction) < 10:
-        print(np.argmax(model_prediction))
+        output_string = str(np.argmax(model_prediction))
     elif np.argmax(model_prediction) >= 10 and np.argmax(model_prediction) <= 35:
-        print(chr(np.argmax(model_prediction) - 10 + 65))
+        output_string = chr(np.argmax(model_prediction) - 10 + 65)
     else:
-        print(chr(np.argmax(model_prediction) - 36 + 97))
+        output_string = chr(np.argmax(model_prediction) - 36 + 97)
 
+    text.insert(END, output_string)
 
 def clearCanvas():
     global output_image
@@ -66,5 +67,8 @@ button.pack()
 
 button=Button(text="Clear Canvas",command=clearCanvas)
 button.pack()
+
+text = Text(master, height=2, width=30)
+text.pack()
 
 master.mainloop()
