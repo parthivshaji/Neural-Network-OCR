@@ -1,4 +1,3 @@
-from typing import final
 from PIL import ImageTk, Image, ImageDraw
 import PIL
 import PIL.ImageOps
@@ -23,16 +22,16 @@ def detectLetter():
     final_image = (np.array(final_image.resize(size, PIL.Image.ANTIALIAS)))
     final_image = np.expand_dims(np.reshape(final_image, (784,)), axis=0)
 
-    char_model = tf.keras.models.load_model('char_recognizer.model')
-    digit_model = tf.keras.models.load_model('digit_recognizer.model')
+    model = tf.keras.models.load_model('letter_digit_recognizer.model')
+    model_prediction = model.predict(final_image / 255)
 
-    char_model_prediction = char_model.predict(final_image / 255)
-    digit_model_prediction = digit_model.predict(final_image / 255)
-
-    if (np.max(char_model_prediction) > np.max(digit_model_prediction)):
-        print("letter",chr(np.argmax(char_model_prediction) + 64))
+    if np.argmax(model_prediction) < 10:
+        print(np.argmax(model_prediction))
+    elif np.argmax(model_prediction) >= 10 and np.argmax(model_prediction) <= 35:
+        print(chr(np.argmax(model_prediction) - 10 + 65))
     else:
-        print("number",np.argmax(digit_model_prediction))
+        print(chr(np.argmax(model_prediction) - 36 + 97))
+
 
 def clearCanvas():
     global output_image
